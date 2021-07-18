@@ -1,0 +1,24 @@
+- name: MSSQL
+  hosts: windows
+  tasks:
+    - name: Install SqlServerDsc
+      win_psmodule:
+        name: SqlServerDsc
+        state: present
+
+    - name: Install .NET Framework 4.5
+      win_dsc:
+        resource_name: WindowsFeature
+        ensure: present
+        name: NET-Framework-45-Core
+    
+    - name: Install MSSQLServer
+      win_dsc:
+        resource_name: SqlSetup
+        InstanceName: MSSQLSERVER
+        Features: SQLENGINE
+        SourcePath: D:\
+        UpdateEnabled: false
+        TcpEnabled: true
+        ForceReboot: true
+        SQLSysAdminAccounts: Administrator
